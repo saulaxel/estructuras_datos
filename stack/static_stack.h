@@ -17,6 +17,6 @@ bool push(struct stack * s, void * data);
 static int16_t getTop(const struct stack * s);
 static bool isEmpty(const struct stack * s);
 static bool isFull(const struct stack * s);
-void * peek(const struct stack * s);
+void * stackPeek(const struct stack * s);
 
 #endif /* _STATIC_STACK */

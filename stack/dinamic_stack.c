@@ -8,6 +8,8 @@
 
 #include "dinamic_stack.h"
 
+#ifndef _SIMPLE_NODE_DEFINED
+#define _SIMPLE_NODE_DEFINED
 struct node {
     void * restrict data;
 
@@ -17,6 +19,7 @@ struct node {
 
     struct node * restrict next;
 };
+#endif // _end _SIMPLE_NODE_DEFINED
 
 struct stack {
     struct node * restrict head;
@@ -27,7 +30,7 @@ struct stack {
 };
 
 struct stack * new_stack(void) {
-    return calloc(1, sizeof(struct stack));
+    return (struct stack *) calloc(1, sizeof(struct stack));
 }
 
 #ifdef _STORE_TYPE
@@ -63,10 +66,14 @@ struct node * new_node(void * data) {
 bool push(struct stack  * restrict s, struct node * restrict n) {
     if( n ) {
 
-        if( isNotEmpty(s) ) n->next = s->head;
+        if( !stack_is_empty(s) ) n->next = s->head;
 
         s->head = n;
+
+#ifdef _STORE_ELEMENTS_NUM
         s->elements++;
+#endif // end _STORE_ELEMENTS_NUM
+
         return true;
     }
 
@@ -78,9 +85,12 @@ struct node * pop(struct stack * restrict s) {
 
     tmp = s->head;
 
-    if( isNotEmpty(s) ) {
+    if( stack_is_empty(s) ) {
          s->head = s->head->next;
+
+#ifdef _STORE_ELEMENTS_NUM
          s->elements--;
+#endif // end _STORE_ELEMENTS_NUM
 
          tmp->next = NULL;
     }
@@ -88,6 +98,10 @@ struct node * pop(struct stack * restrict s) {
     return tmp;
 }
 
-static bool isNotEmpty(const struct stack * restrict s) {
+void * stack_peek(const struct stack * restrict s) {
+    return stack_is_empty(s) ? s->head->data : NULL;
+}
+
+bool stack_is_empty(const struct stack * restrict s) {
     return s->head == NULL;
 }

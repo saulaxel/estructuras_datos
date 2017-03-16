@@ -62,6 +62,6 @@ static bool isFull(const struct stack * s){
     return s->top == s->max -1;
 }
 
-void * peek(const struct stack * s) {
+void * stackPeek(const struct stack * s) {
     return s->top != -1 ? s->content[s->top] : NULL;
 }
