@@ -1,5 +1,6 @@
 #ifndef _DINAMIC_QUEUE_H
 #define _DINAMIC_QUEUE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -10,6 +11,8 @@
 
 //#define STORE_TYPE
 //#define STORE_ELEMENTS_NUM
+//#define DOUBLE_LINKED
+
 #ifndef _SIMPLE_NODE_DEFINED
 #define _SIMPLE_NODE_DEFINED
 
@@ -21,20 +24,23 @@ struct node {
 #endif /* STORE_TYPE */
 
     struct node * restrict next;
+#ifdef DOUBLE_LINKED
+    struct node * restrict prev;
+#endif
 };
 
 #endif // _SIMPLE_NODE_DEFINED
 
 struct queue {
-    struct node * restrict head;
-    struct node *          rear;
+    struct node * head;
+    struct node * rear;
 
 #ifdef STORE_ELEMENTS_NUM
     int16_t elements;
 #endif /* STORE_ELEMENTS_NUM */
 };
 
-struct queue * new_queue(void);
+inline struct queue * new_queue(void);
 void freeQueue(struct queue * restrict q);
 
 #ifdef STORE_TYPE
