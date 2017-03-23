@@ -1,5 +1,31 @@
+/*
+ * (C) Copyright 2017 Martinez Ortiz Saul UNAM
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * Tt under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*#########################################################
+ * Library: dinamic_stack
+ * Description: A stack implementation with structs in C.
+ *#########################################################*/
+
 #ifndef _DINAMIC_STACK_H
 #define _DINAMIC_STACK_H
+
+/*-*-*-*-*-*-*-*-*
+ -  Dependencies -
+ *-*-*-*-*-*-*-*-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +34,10 @@
 #ifdef STORE_TYPE
 #include <stdint.h>
 #endif /* STORE_TYPE */
+
+/*-*-*-*-*-*-*-*-*-*-*
+ - Data definitions  -
+ *-*-*-*-*-*-*-*-*-*-*/
 
 //#define STORE_TYPE
 //#define STORE_ELEMENTS_NUM
@@ -38,7 +68,11 @@ struct stack {
 #endif /* STORE_ELEMENTS_NUM */
 };
 
-/*-* Creating and deleting *-*/
+/*-*-*-*-*-*-*-*-*-*-*-*-*
+ - Function declarations -
+ *-*-*-*-*-*-*-*-*-*-*-*-*/
+
+/*-* Allocate and free memory*-*/
 extern struct stack * new_stack(void);
 void free_stack(struct stack * restrict s);
 
@@ -55,9 +89,20 @@ bool push(struct stack * restrict s, struct node * restrict n);
 struct node * pop(struct stack * restrict s);
 struct node * stack_peek(const struct stack * restrict s, bool from_start);
 
-/*-* Extras *-*/
+/*-* Auxiliar functions*-*/
 extern bool stack_is_empty(const struct stack * restrict s);
 
+/*-*-*-*-*-*-*-*-*-*-*-*-*
+ - Function definitions  -
+ *-*-*-*-*-*-*-*-*-*-*-*-*/
+
+/*
+ * Function    : new_stack
+ * Description : Allocates memory for struct stech.
+ *
+ * Returns     : The direction of allocated memory if any,
+ *               NULL otherwise.
+ */
 inline struct stack * new_stack(void) {
     return (struct stack *) calloc(1, sizeof(struct stack));
 }
