@@ -45,6 +45,7 @@
 
 #ifndef _SIMPLE_NODE_DEFINED
 #define _SIMPLE_NODE_DEFINED
+
 struct node {
     void * restrict data;
 
@@ -58,6 +59,7 @@ struct node {
 #endif /* end DOUBLE_LINKED */
 
 };
+
 #endif // end _SIMPLE_NODE_DEFINED
 
 struct stack {
@@ -107,6 +109,17 @@ inline struct stack * new_stack(void) {
     return (struct stack *) calloc(1, sizeof(struct stack));
 }
 
+void free_stack(struct stack * restrict s) {
+    struct node * n = pop(s);
+
+    while( n ) {
+        free(n);
+        n = pop(s);
+    }
+
+    free(s);
+}
+
 #ifdef STORE_TYPE
 struct node * new_node(void * restrict data, const char type) {
 #else /* not defined STORE_TYPE */
@@ -134,7 +147,6 @@ bool push(struct stack  * restrict s, struct node * restrict n) {
         if( !stack_is_empty(s) ) {
             n->next = s->head;
 #ifdef DOUBLE_LINKED
-        printf("Esta doblemente ligada\n");
             s->head->prev = n;
 #endif /* DOUBLE_LINKED */
         }

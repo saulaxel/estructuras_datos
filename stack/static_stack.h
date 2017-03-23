@@ -54,7 +54,7 @@ static inline void free_stack(struct stack *);
 /* Managing data */
 void * pop(struct stack * s);
 bool push(struct stack * s, void * data);
-static inline void * stack_peek(const struct stack * s);
+static inline void * stack_peek(const struct stack * s, bool from_start);
 
 /* Auxiliar functions */
 static inline bool stack_is_empty(const struct stack * s);
@@ -112,7 +112,7 @@ static inline void free_stack(struct stack *s) {
  * Returns    : false if push is possible, true otherwise.
  */
 bool push(struct stack * s, void * data) {
-    if(!isFull(s)){
+    if(!stack_is_full(s)){
         s->top++;
         s->content[s->top] = data;
         return true;
@@ -130,7 +130,7 @@ bool push(struct stack * s, void * data) {
 void * pop(struct stack * s) {
     void * temp;
 
-    if (!isEmpty(s)) {
+    if (!stack_is_empty(s)) {
         temp = s->content[s->top];
         s->top--;
         return temp;
@@ -164,10 +164,10 @@ static inline bool stack_is_full(const struct stack * s){
  * Function   : stack_peek
  * Description: returns the content of the stack one by one.
  *
- * returns    : First node if 'from_start' is true, secuentially
+ * returns    : First data if 'from_start' is true, secuentially
  *              calculated data when false.
  */
-static inline void * stack_peek(const struct stack * s, int from_start) {
+static inline void * stack_peek(const struct stack * s, bool from_start) {
     static int i;
 
     if( from_start ) { i = s->top; }
