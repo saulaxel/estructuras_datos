@@ -16,7 +16,7 @@
  */
 
 /*#########################################################
- * Library: dinamic_stack
+ * Library: dinamic_queue
  * Description: A stack implementation with structs in C.
  *#########################################################*/
 
