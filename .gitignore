@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 main.c
 a.out
 *.exe
 *.o
-=======
-prueba_stack.c
-prueba_queue.c
-prueba_list.c
+
 prueba_stack
 prueba_queue
 prueba_list
+
 a.out
->>>>>>> 8d57a12f0449c24911601b1bbb64b428fcd021cd
