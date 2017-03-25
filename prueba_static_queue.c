@@ -5,7 +5,7 @@
 void printStack(struct queue * restrict s) {
     void * data = queue_peek(s, true);
 
-    puts("El contenido de la pila es:");
+    puts("El contenido de la cola es:");
 
     if( data ) {
         printf("| %9p | -> %2d\n", data, *((int *)data));
@@ -19,8 +19,8 @@ void printStack(struct queue * restrict s) {
 }
 
 int main(void) {
-    printf("Pruebas de la pila dinAmica:\n");
-    int a[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 , 11, 12, 13, 14};
+    printf("Pruebas de la cola dinAmica:\n");
+    int a[14] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 , 11, 12, 13, 14 };
 
     struct queue * pila = new_queue(10);
 

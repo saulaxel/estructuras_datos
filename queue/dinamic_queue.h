@@ -41,23 +41,23 @@
 #define _SIMPLE_NODE_DEFINED
 
 struct node {
-    void * restrict data;
+    void * __restrict data;
 
 #ifdef STORE_TYPE
     char type;
 #endif /* STORE_TYPE */
 
-    struct node * restrict next;
+    struct node * __restrict next;
 #ifdef DOUBLE_LINKED
-    struct node * restrict prev;
+    struct node * __restrict prev;
 #endif
 };
 
 #endif // _SIMPLE_NODE_DEFINED
 
 struct queue {
-    struct node * head;
-    struct node * rear;
+    struct node * __restrict head;
+    struct node * __restrict rear;
 
 #ifdef STORE_ELEMENTS_NUM
     int16_t elements;
@@ -70,31 +70,38 @@ struct queue {
 
 /* Allocate and free memory*/
 static inline struct queue * new_queue(void);
-void freeQueue(struct queue * restrict q);
+void freeQueue(struct queue * __restrict q);
 
 #ifdef STORE_TYPE
-struct node * new_node(void * restrict data, const char type);
+struct node * new_node(void * __restrict data, const char type);
 #else
-struct node * new_node(void * restrict data);
+struct node * new_node(void * __restrict data);
 #endif
 
 /* Managing data */
-bool en_queue(struct queue * restrict s, struct node * restrict n);
-struct node * de_queue(struct queue * restrict s);
-void * queue_peek(const struct queue * restrict q);
+bool en_queue(struct queue * __restrict s, struct node * __restrict n);
+struct node * de_queue(struct queue * __restrict s);
+void * queue_peek(const struct queue * __restrict q, bool from_start);
 
-bool queue_is_empty(const struct queue * restrict q);
-
-inline struct queue * new_queue(void) {
-    return (struct queue *) calloc(1, sizeof(struct queue));
-}
+bool queue_is_empty(const struct queue * __restrict q);
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*
  - Function definitions  -
  *-*-*-*-*-*-*-*-*-*-*-*-*/
 
+static inline struct queue * new_queue(void) {
+    return (struct queue *) calloc(1, sizeof(struct queue));
+}
+
+void free_queue(struct queue * __restrict q) {
+    while( !queue_is_empty(q) )
+        free(de_queue(q));
+
+    free(q);
+}
+
 #ifdef STORE_TYPE
-struct node * new_node(void * restrict data, const char type) {
+struct node * new_node(void * __restrict data, const char type) {
 #else /* not defined STORE_TYPE */
 struct node * new_node(void * data) {
 #endif /* end STORE_TYPE */
@@ -113,7 +120,7 @@ struct node * new_node(void * data) {
     return nq;
 }
 
-bool en_queue(struct queue  * restrict q, struct node * restrict n) {
+bool en_queue(struct queue  * __restrict q, struct node * __restrict n) {
     if( n ) {
 
         if( !queue_is_empty(q) ) {
@@ -138,7 +145,7 @@ bool en_queue(struct queue  * restrict q, struct node * restrict n) {
     return false;
 }
 
-struct node * de_queue(struct queue * restrict q) {
+struct node * de_queue(struct queue * __restrict q) {
     struct node * tmp;
 
     tmp = q->head;
@@ -146,7 +153,7 @@ struct node * de_queue(struct queue * restrict q) {
     if( !queue_is_empty(q) ) {
          q->head = q->head->next;
 #ifdef DOUBLE_LINKED
-         q->head->prev = NULL;
+         if( q->head ) q->head->prev = NULL;
 #endif /*end DOUBLE_LINKED*/
 
 #ifdef STORE_ELEMENTS_NUM
@@ -162,21 +169,17 @@ struct node * de_queue(struct queue * restrict q) {
     return tmp;
 }
 
-inline bool queue_is_empty(const struct queue * restrict q) {
+inline bool queue_is_empty(const struct queue * __restrict q) {
     return q->head == NULL;
 }
 
-void * queue_peek(const struct queue * restrict q) {
-    return queue_is_empty(q) ? NULL : q->head;
+void * queue_peek(const struct queue * __restrict q, bool from_start) {
+    static struct node * apt;
+
+    if( from_start ) { apt = q->head;   }
+    else if( apt )   { apt = apt->next; }
+
+    return apt;
 }
 
-#endif /* _OPERACIONES_PILA */
-
-/*#########################################################
- * Library: static_queue
- * Description: A queue implementation with arrays in C.
- *#########################################################*/
-
-#ifndef _STATIC_QUEUE
-#define _STATIC_QUEUE
-
+#endif /* _DINAMIC_QUEUE_H */

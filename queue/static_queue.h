@@ -40,7 +40,7 @@
 
 struct queue {
     /* Storage place */
-    void * * restrict content;
+    void * * __restrict content;
 
     /* Limits */
     int16_t max;
@@ -58,12 +58,12 @@ struct queue {
 
 /* Allocate and free memory*/
 struct queue * new_queue(int16_t size);
-void          free_queue(struct queue * restrict q);
+void          free_queue(struct queue * __restrict q);
 
 /* Managing data */
-bool   en_queue(struct queue * restrict q, void * restrict data);
-void * de_queue(struct queue * restrict q);
-void * queue_pick(const struct queue * restrict q, bool from_start);
+bool   en_queue(struct queue * __restrict q, void * __restrict data);
+void * de_queue(struct queue * __restrict q);
+void * queue_pick(const struct queue * __restrict q, bool from_start);
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*
  - Function definitions  -
@@ -105,7 +105,7 @@ struct queue * new_queue(int16_t size) {
  * Description : Returns the space of the queue to the 
  *               system.
  */
-void free_queue(struct queue * restrict q) {
+void free_queue(struct queue * __restrict q) {
     free(q->content);
     free(q);
 }
@@ -118,7 +118,7 @@ void free_queue(struct queue * restrict q) {
  * Returns     : True if was able to insert, false if the 
  *               queue was full.
  */
-bool en_queue(struct queue * restrict q, void * restrict data) {
+bool en_queue(struct queue * __restrict q, void * __restrict data) {
     if( !q->is_full ){
 
         q->is_empty = false;
@@ -142,7 +142,7 @@ bool en_queue(struct queue * restrict q, void * restrict data) {
  * Returns     : True if was able to delete, false if the 
  *               queue was empty.
  */
-void * de_queue(struct queue * restrict q) {
+void * de_queue(struct queue * __restrict q) {
     void * temp;
 
     if (!q->is_empty) {
@@ -167,7 +167,7 @@ void * de_queue(struct queue * restrict q) {
  * Returns     : First element if 'from_start' is true the other
  *               if not.
  */
-void * queue_peek(const struct queue * restrict q, bool from_start) {
+void * queue_peek(const struct queue * __restrict q, bool from_start) {
     static int i;
     if(q->is_empty) return NULL;
 

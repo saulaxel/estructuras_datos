@@ -38,7 +38,7 @@
 #define _MAX_SIZE 10000
 
 struct stack {
-    void * restrict * content;
+    void * __restrict * content;
     int16_t top;
     int16_t max;
 };
@@ -49,16 +49,17 @@ struct stack {
 
 /* Allocate and free memory*/
 struct stack * new_stack(int16_t size);
-static inline void free_stack(struct stack *);
+static inline void free_stack(struct stack * __restrict);
 
 /* Managing data */
 void * pop(struct stack * s);
 bool push(struct stack * s, void * data);
-static inline void * stack_peek(const struct stack * s, bool from_start);
+static inline void * stack_peek(const struct stack * __restrict s,
+        bool from_start);
 
 /* Auxiliar functions */
-static inline bool stack_is_empty(const struct stack * s);
-static inline bool stack_is_full(const struct stack * s);
+static inline bool stack_is_empty(const struct stack * __restrict s);
+static inline bool stack_is_full (const struct stack * __restrict s);
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*
  - Function definitions  -
@@ -99,7 +100,7 @@ struct stack * new_stack(int16_t size) {
  * Function   : free_stack
  * Description: Returns allocated memory of 's' to the system.
  */
-static inline void free_stack(struct stack *s) {
+static inline void free_stack(struct stack * __restrict s) {
     free(s->content);
     free(s);
 }
@@ -111,7 +112,7 @@ static inline void free_stack(struct stack *s) {
  *
  * Returns    : false if push is possible, true otherwise.
  */
-bool push(struct stack * s, void * data) {
+bool push(struct stack * __restrict s, void * __restrict data) {
     if(!stack_is_full(s)){
         s->top++;
         s->content[s->top] = data;
@@ -127,7 +128,7 @@ bool push(struct stack * s, void * data) {
  *
  * Returns    : data if pop was possible, NULL otherwise.
  */
-void * pop(struct stack * s) {
+void * pop(struct stack * __restrict s) {
     void * temp;
 
     if (!stack_is_empty(s)) {
@@ -145,7 +146,7 @@ void * pop(struct stack * s) {
  *
  * Returns    : true if stack has no elements, false otherwise.
  */
-static inline bool stack_is_empty(const struct stack * s){
+static inline bool stack_is_empty(const struct stack * __restrict s){
     return s->top == -1;
 }
 
@@ -155,7 +156,7 @@ static inline bool stack_is_empty(const struct stack * s){
  *
  * Returns    : true if stack has no space, false otherwise.
  */
-static inline bool stack_is_full(const struct stack * s){
+static inline bool stack_is_full(const struct stack * __restrict s){
     return s->top == s->max -1;
 }
 
@@ -167,7 +168,8 @@ static inline bool stack_is_full(const struct stack * s){
  * returns    : First data if 'from_start' is true, secuentially
  *              calculated data when false.
  */
-static inline void * stack_peek(const struct stack * s, bool from_start) {
+static inline void * stack_peek(const struct stack * __restrict s,
+        bool from_start) {
     static int i;
 
     if( from_start ) { i = s->top; }

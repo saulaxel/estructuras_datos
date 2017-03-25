@@ -47,15 +47,15 @@
 #define _SIMPLE_NODE_DEFINED
 
 struct node {
-    void * restrict data;
+    void * __restrict data;
 
 #ifdef STORE_TYPE
     char type;
 #endif /* end STORE_TYPE */
 
-    struct node * restrict next;
+    struct node * __restrict next;
 #ifdef DOUBLE_LINKED
-    struct node * restrict prev;
+    struct node * __restrict prev;
 #endif /* end DOUBLE_LINKED */
 
 };
@@ -63,7 +63,7 @@ struct node {
 #endif // end _SIMPLE_NODE_DEFINED
 
 struct stack {
-    struct node * restrict head;
+    struct node * __restrict head;
 
 #ifdef STORE_ELEMENTS_NUM
     int32_t elements;
@@ -76,23 +76,23 @@ struct stack {
 
 /*-* Allocate and free memory*-*/
 extern struct stack * new_stack(void);
-void free_stack(struct stack * restrict s);
+void free_stack(struct stack * __restrict s);
 
 #ifndef _NEW_NODE_DECLARED
 #ifdef STORE_TYPE
-struct node * new_node(void * restrict data, const char type);
+struct node * new_node(void * __restrict data, const char type);
 #else
-struct node * new_node(void * restrict data);
+struct node * new_node(void * __restrict data);
 #endif // end STORE_TYPE
 #endif /* _NEW_NODE_DECLARED */
 
 /*-* Managing data *-*/
-bool push(struct stack * restrict s, struct node * restrict n);
-struct node * pop(struct stack * restrict s);
-struct node * stack_peek(const struct stack * restrict s, bool from_start);
+bool push(struct stack * __restrict s, struct node * __restrict n);
+struct node * pop(struct stack * __restrict s);
+struct node * stack_peek(const struct stack * __restrict s, bool from_start);
 
 /*-* Auxiliar functions*-*/
-extern bool stack_is_empty(const struct stack * restrict s);
+extern bool stack_is_empty(const struct stack * __restrict s);
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*
  - Function definitions  -
@@ -109,21 +109,18 @@ inline struct stack * new_stack(void) {
     return (struct stack *) calloc(1, sizeof(struct stack));
 }
 
-void free_stack(struct stack * restrict s) {
-    struct node * n = pop(s);
+void free_stack(struct stack * __restrict s) {
 
-    while( n ) {
-        free(n);
-        n = pop(s);
-    }
+    while( !stack_is_empty() )
+        free(pop(s));
 
     free(s);
 }
 
 #ifdef STORE_TYPE
-struct node * new_node(void * restrict data, const char type) {
+struct node * new_node(void * __restrict data, const char type) {
 #else /* not defined STORE_TYPE */
-struct node * new_node(void * restrict data) {
+struct node * new_node(void * __restrict data) {
 #endif /* end STORE_TYPE */
 
     if( !data ) return NULL;
@@ -141,7 +138,7 @@ struct node * new_node(void * restrict data) {
 }
 
 
-bool push(struct stack  * restrict s, struct node * restrict n) {
+bool push(struct stack  * __restrict s, struct node * __restrict n) {
     if( n ) {
 
         if( !stack_is_empty(s) ) {
@@ -163,7 +160,7 @@ bool push(struct stack  * restrict s, struct node * restrict n) {
     return false;
 }
 
-struct node * pop(struct stack * restrict s) {
+struct node * pop(struct stack * __restrict s) {
     struct node * tmp;
 
     tmp = s->head;
@@ -184,7 +181,7 @@ struct node * pop(struct stack * restrict s) {
     return tmp;
 }
 
-struct node * stack_peek(const struct stack * restrict s, bool from_start) {
+struct node * stack_peek(const struct stack * __restrict s, bool from_start) {
     static struct node * apt;
 
     if( from_start ) {
@@ -196,7 +193,7 @@ struct node * stack_peek(const struct stack * restrict s, bool from_start) {
     return apt;
 }
 
-inline bool stack_is_empty(const struct stack * restrict s) {
+inline bool stack_is_empty(const struct stack * __restrict s) {
     return s->head == NULL;
 }
 
