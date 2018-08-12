@@ -29,38 +29,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <stdbool.h>
 
-#define ASSERT_COND(condition, message) assert(((void)message, condition))
-#define ALLOC_ARR(type, number) (type *) calloc(number, sizeof(type))
-#define REALLOC_ARR(old, type, number) (type *) realloc(old, number * sizeof(type))
-
-/*-*-*-*-*-*-*-*-*-*-*
- - Data definitions  -
- *-*-*-*-*-*-*-*-*-*-*/
-
-struct stack {
-    void * restrict * content;
-    size_t top;
-    size_t max;
-};
-
-/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
- - Function declarations and macrofunctions  -
- *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-
-/* Allocate and free memory*/
-struct stack * new_stack(size_t size);
-static inline void free_stack(struct stack *);
-
-/* Managing data */
-void * pop(struct stack * s);
-bool push(struct stack * s, void * data);
-static inline void * stack_peek(const struct stack * s,
-        bool from_start);
-
-/* Auxiliar functions */
-static inline bool stack_is_empty(const struct stack * s);
-static inline bool stack_is_full (const struct stack * s);
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+ - Declaraciones anticipadas -
+ *-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+typedef struct pila Pila;
 
 #endif /* PILA_H */
